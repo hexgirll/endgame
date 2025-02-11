@@ -1,26 +1,33 @@
-CC = clang
-CFLAGS = -std=c11 -Wall -Wextra -Werror -Wpedantic
-
-SRC = $(wildcard src/*.c)
-OBJ = $(patsubst src/%.c, obj/%.o, $(SRC))
-
 NAME = endgame
+
+SRCDIR = src
+INCDIR = inc
+OBJDIR = obj
+RESOURCEDIR = resource/raylib/src
+
+SRC_FILES = $(wildcard $(SRCDIR)/*.c)
+OBJ_FILES = $(SRC_FILES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
+
+CC = clang
+CFLAGS = -Wall -Wextra -Werror -std=c11 -I$(INCDIR) -I$(RESOURCEDIR)
+LFLAGS = -L$(RESOURCEDIR) -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
-	$(CC) $(OBJ) $(LDFLAGS) -o $@
+$(NAME): $(OBJ_FILES)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJ_FILES) $(LFLAGS)
 
-obj/%.o: src/%.c | obj
+$(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-obj:
-	mkdir -p obj maps
+$(OBJDIR):
+	mkdir -p $(OBJDIR)
 
 clean:
-	rm -rf obj
+	rm -rf $(OBJDIR)
 
-uninstall:
-	rm -rf obj maps path.txt $(NAME)
+uninstall: clean
+	rm -f $(NAME)
 
 reinstall: uninstall all
+
