@@ -43,8 +43,8 @@ int main() {
  
     background = LoadTexture("resource/textures/background.png");
     sprite = LoadTexture("resource/textures/nindzia.png");
-
     run = LoadTexture("resource/textures/run.png");
+
     Rectangle run_source = {0.f , 0.f, (float)run.width / 6.f, (float)run.height};
 
     t_player player = {
@@ -64,8 +64,6 @@ int main() {
     float running_time = 0;
     const float update_time = 1.f/12.f;
 
-    e_direction direction = RIGHT;
-
     while (!WindowShouldClose()) {
 
         float delta_time = GetFrameTime();
@@ -84,9 +82,10 @@ int main() {
 
         float current_time = GetTime();
 
+        // Dash
         if (IsKeyPressed(KEY_LEFT_SHIFT) && (current_time - player.last_dash_time > DASH_COOLDOWN)) {
             move = DASH;
-            player.last_dash_time = current_time; // Reset the dash cooldown time
+            player.last_dash_time = current_time; // Reset dash cooldown
         }
 
         // Apply dash
@@ -108,9 +107,9 @@ int main() {
         
         // Normal movement
         if (move != DASH) {
-            if(IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D)) {
+            if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D)) {
                 move = RUN;
-                direction = RIGHT;
+                player.direction = RIGHT;
                 player.x += player.speed;
                 running_time += delta_time;
                 if (running_time >= update_time) {
@@ -119,9 +118,9 @@ int main() {
                     run_source.x = frame * run.width / 6;
                 }
             }
-            else if(IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A)) {
+            else if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A)) {
                 move = RUN;
-                direction = LEFT;
+                player.direction = LEFT;
                 player.x -= player.speed;
                 running_time += delta_time;
                 if (running_time >= update_time) {
@@ -148,8 +147,15 @@ int main() {
 
             DrawTexturePro(background, back_src, back_dest, back_origin, rotation, WHITE);
 
-            if (move == RUN) {
-                if (direction == RIGHT) {
+            if (move == DASH) {
+                for (int i = 0; i < 5; i++) {
+                    float offset = (i - 2) * 2.0f;
+                    DrawTexture(sprite, player.x + offset, player.y + offset, (Color){255, 255, 255, 50});
+                }
+            }
+
+            if (move == RUN || move == DASH) {
+                if (player.direction == RIGHT) {
                     DrawTexturePro(run, run_source, (Rectangle){player.x, player.y, player.width, player.height}, (Vector2){0, 0}, 0, WHITE);
                 } else {
                     // smotrit vlevo
@@ -158,7 +164,7 @@ int main() {
                 }
             } 
             else {
-                if (direction == RIGHT) {
+                if (player.direction == RIGHT) {
                     DrawTexturePro(sprite, (Rectangle){0, 0, sprite.width, sprite.height}, (Rectangle){player.x, player.y, player.width, player.height}, (Vector2){0, 0}, 0, WHITE);
                 } else {
                     // smotrit vlevo
@@ -166,8 +172,6 @@ int main() {
                                   (Rectangle){player.x, player.y, player.width, player.height}, (Vector2){0, 0}, 0, WHITE);
                 }
             }
-
-            //DrawRectangleLines(player.x, player.y, player.width, player.height, RED);
         EndDrawing();
     }
     
