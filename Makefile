@@ -10,7 +10,7 @@ OBJ_FILES = $(SRC_FILES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
 CC = clang
 CFLAGS = -Wall -Wextra -Werror -std=c11 -I$(INCDIR) -I$(RESOURCEDIR)
-LFLAGS = -L$(RESOURCEDIR) -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+LFLAGS = -L../$(RESOURCEDIR) -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 
 all: $(NAME)
 
