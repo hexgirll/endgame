@@ -6,5 +6,20 @@
 #include <stdbool.h>
 #include <unistd.h>
 
+#define DASH_SPEED_MULTIPLIER 5
+#define DASH_DURATION 0.2f
+#define DASH_COOLDOWN 0.5f
+
+typedef enum {
+    IDLE,
+    RUN,
+    JUMP,
+    DASH
+} e_move;
+
+typedef enum {
+    RIGHT,
+    LEFT
+} e_direction;
 
 #endif
