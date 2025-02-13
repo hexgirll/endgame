@@ -1,30 +1,54 @@
 #include "header.h"
 
 void InitLevel() {
-    platforms[0] = (Platform){{0, 800}, {235, 1}, LoadTexture("resource/textures/platforms/platform6.png"), 0.8f, 0.8f, 15 * 0.8f};
-    platforms[1] = (Platform){{1200, 450}, {235, 1}, LoadTexture("resource/textures/platforms/platform6.png"), 0.8f, 0.8f, 15 * 0.8f};
-    platforms[2] = (Platform){{295, 300}, {235, 1}, LoadTexture("resource/textures/platforms/platform6.png"), 0.8f, 0.8f, 15 * 0.8f};
-    platforms[3] = (Platform){{0, 550}, {130, 1}, LoadTexture("resource/textures/platforms/platform1.png"), 0.7f, 0.7f, 5 * 0.4f};
-    platforms[4] = (Platform){{650, 780}, {130, 1}, LoadTexture("resource/textures/platforms/platform1.png"), 0.7f, 0.7f, 5 * 0.4f};
-    platforms[5] = (Platform){{1450, 170}, {130, 1}, LoadTexture("resource/textures/platforms/platform1.png"), 0.7f, 0.7f, 5 * 0.4f};
-    platforms[6] = (Platform){{300, 750}, {126, 1}, LoadTexture("resource/textures/platforms/platform2.png"), 1.0f, 1.0f, 5 * 0.4f};
-    platforms[7] = (Platform){{323, 520}, {101, 1}, LoadTexture("resource/textures/platforms/platform2.png"), 0.8f, 0.8f, 5 * 0.4f};
-    platforms[8] = (Platform){{800, 720}, {101, 1}, LoadTexture("resource/textures/platforms/platform2.png"), 0.8f, 0.8f, 5 * 0.4f};
-    platforms[9] = (Platform){{1280, 120}, {101, 1}, LoadTexture("resource/textures/platforms/platform2.png"), 0.8f, 0.8f, 5 * 0.4f};
-    platforms[10] = (Platform){{1030, 550}, {90, 1}, LoadTexture("resource/textures/platforms/platform2.png"), 0.7f, 0.7f, 5 * 0.4f};
-    platforms[11] = (Platform){{920, 520}, {90, 1}, LoadTexture("resource/textures/platforms/platform2.png"), 0.7f, 0.7f, 5 * 0.4f};
-    platforms[12] = (Platform){{810, 490}, {90, 1}, LoadTexture("resource/textures/platforms/platform2.png"), 0.7f, 0.7f, 5 * 0.4f};
-    platforms[13] = (Platform){{150, 460}, {160, 1}, LoadTexture("resource/textures/platforms/platform3.png"), 0.7f, 0.7f, 25 * 0.8f};
-    platforms[14] = (Platform){{690, 150}, {160, 1}, LoadTexture("resource/textures/platforms/platform3.png"), 0.7f, 0.7f, 25 * 0.8f};
-    platforms[15] = (Platform){{0, 190}, {160, 10}, LoadTexture("resource/textures/platforms/platform3.png"), 0.7f, 0.7f, 25 * 0.8f};
-    platforms[16] = (Platform){{450, 550}, {255, 1}, LoadTexture("resource/textures/platforms/platform4.png"), 0.7f, 0.7f, 25 * 0.7f};
-    platforms[17] = (Platform){{1250, 250}, {255, 1}, LoadTexture("resource/textures/platforms/platform4.png"), 0.7f, 0.7f, 25 * 0.7f};
-    platforms[18] = (Platform){{950, 185}, {255, 1}, LoadTexture("resource/textures/platforms/platform4.png"), 0.7f, 0.7f, 25 * 0.7f};
-    platforms[19] = (Platform){{1200, 830}, {360, 1}, LoadTexture("resource/textures/platforms/platform4.png"), 1.0f, 1.0f, 25 * 1.0f};
-    platforms[20] = (Platform){{390, 135}, {160, 1}, LoadTexture("resource/textures/platforms/platform5.png"), 0.8f, 0.8f, 25 * 0.95f};
-    platforms[21] = (Platform){{1000, 700}, {160, 1}, LoadTexture("resource/textures/platforms/platform5.png"), 0.8f, 0.8f, 25 * 0.9f};
-    platforms[22] = (Platform){{810, 350}, {290, 1}, LoadTexture("resource/textures/platforms/platform6.png"), 1.0f, 1.0f, 25 * 0.7f};
-    platforms[23] = (Platform){{1180, 660}, {90, 1}, LoadTexture("resource/textures/platforms/platform2.png"), 0.7f, 0.7f, 5 * 0.4f};
+    platforms[0] = (Platform){{0, 800}, {235, 1}, LoadTexture("resource/textures/platform6.png"), 0.8f, 0.8f, 15 * 0.8f};
+    platforms[1] = (Platform){{1200, 450}, {235, 1}, LoadTexture("resource/textures/platform6.png"), 0.8f, 0.8f, 15 * 0.8f};
+    platforms[2] = (Platform){{295, 300}, {235, 1}, LoadTexture("resource/textures/platform6.png"), 0.8f, 0.8f, 15 * 0.8f};
+    platforms[3] = (Platform){{0, 550}, {130, 1}, LoadTexture("resource/textures/platform1.png"), 0.7f, 0.7f, 5 * 0.4f};
+    platforms[4] = (Platform){{650, 780}, {130, 1}, LoadTexture("resource/textures/platform1.png"), 0.7f, 0.7f, 5 * 0.4f};
+    platforms[5] = (Platform){{1450, 170}, {130, 1}, LoadTexture("resource/textures/platform1.png"), 0.7f, 0.7f, 5 * 0.4f};
+    platforms[6] = (Platform){{300, 750}, {126, 1}, LoadTexture("resource/textures/platform2.png"), 1.0f, 1.0f, 5 * 0.4f};
+    platforms[7] = (Platform){{323, 520}, {101, 1}, LoadTexture("resource/textures/platform2.png"), 0.8f, 0.8f, 5 * 0.4f};
+    platforms[8] = (Platform){{800, 720}, {101, 1}, LoadTexture("resource/textures/platform2.png"), 0.8f, 0.8f, 5 * 0.4f};
+    platforms[9] = (Platform){{1280, 120}, {101, 1}, LoadTexture("resource/textures/platform2.png"), 0.8f, 0.8f, 5 * 0.4f};
+    platforms[10] = (Platform){{1030, 550}, {90, 1}, LoadTexture("resource/textures/platform2.png"), 0.7f, 0.7f, 5 * 0.4f};
+    platforms[11] = (Platform){{920, 520}, {90, 1}, LoadTexture("resource/textures/platform2.png"), 0.7f, 0.7f, 5 * 0.4f};
+    platforms[12] = (Platform){{810, 490}, {90, 1}, LoadTexture("resource/textures/platform2.png"), 0.7f, 0.7f, 5 * 0.4f};
+    platforms[13] = (Platform){{150, 460}, {160, 1}, LoadTexture("resource/textures/platform3.png"), 0.7f, 0.7f, 25 * 0.8f};
+    platforms[14] = (Platform){{690, 150}, {160, 1}, LoadTexture("resource/textures/platform3.png"), 0.7f, 0.7f, 25 * 0.8f};
+    platforms[15] = (Platform){{0, 190}, {160, 10}, LoadTexture("resource/textures/platform3.png"), 0.7f, 0.7f, 25 * 0.8f};
+    platforms[16] = (Platform){{450, 550}, {255, 1}, LoadTexture("resource/textures/platform4.png"), 0.7f, 0.7f, 25 * 0.7f};
+    platforms[17] = (Platform){{1250, 250}, {255, 1}, LoadTexture("resource/textures/platform4.png"), 0.7f, 0.7f, 25 * 0.7f};
+    platforms[18] = (Platform){{950, 185}, {255, 1}, LoadTexture("resource/textures/platform4.png"), 0.7f, 0.7f, 25 * 0.7f};
+    platforms[19] = (Platform){{1200, 830}, {360, 1}, LoadTexture("resource/textures/platform4.png"), 1.0f, 1.0f, 25 * 1.0f};
+    platforms[20] = (Platform){{390, 135}, {160, 1}, LoadTexture("resource/textures/platform5.png"), 0.8f, 0.8f, 25 * 0.95f};
+    platforms[21] = (Platform){{1000, 700}, {160, 1}, LoadTexture("resource/textures/platform5.png"), 0.8f, 0.8f, 25 * 0.9f};
+    platforms[22] = (Platform){{810, 350}, {290, 1}, LoadTexture("resource/textures/platform6.png"), 1.0f, 1.0f, 25 * 0.7f};
+    platforms[23] = (Platform){{1180, 660}, {90, 1}, LoadTexture("resource/textures/platform2.png"), 0.7f, 0.7f, 5 * 0.4f};
+}
+
+// Function to initialize coins
+void InitCoins() {
+    for (int i = 0; i < MAX_COINS; i++) {
+        coins[i].position = (Vector2){ GetRandomValue(100, 1500), GetRandomValue(100, 800) };
+        coins[i].collected = false;
+    }
+}
+
+bool CheckCoinCollision(t_player player, t_coin coin) {
+    return (player.x < coin.position.x + player.animation.coin_source.width &&
+            player.x + player.width > coin.position.x &&
+            player.y < coin.position.y + player.animation.coin_source.height &&
+            player.y + player.height > coin.position.y);
+}
+
+void HandleCoinCollection(t_player *player) {
+    for (int i = 0; i < MAX_COINS; i++) {
+        if (!coins[i].collected && CheckCoinCollision(*player, coins[i])) {
+            coins[i].collected = true;
+            score++;
+        }
+    }
 }
 
 void DrawLevel() {
@@ -32,7 +56,7 @@ void DrawLevel() {
         Rectangle source = {0, 0, platforms[i].texture.width, platforms[i].texture.height};
         Rectangle dest = {
             platforms[i].position.x,
-            platforms[i].position.y - platforms[i].grassHeight, // Отрисовываем ниже
+            platforms[i].position.y - platforms[i].grassHeight,
             platforms[i].texture.width * platforms[i].scaleX,
             platforms[i].texture.height * platforms[i].scaleY
         };
@@ -156,8 +180,8 @@ int main() {
     e_move move = IDLE;
     e_animation animation = IDLE_A;
 
-
     InitLevel();
+    InitCoins();  // Initialize coins
 
     while (!WindowShouldClose()) {
         float delta_time = GetFrameTime();
@@ -219,6 +243,7 @@ int main() {
         player.y += player.velocity;
 
         HandleCollisions(&player, window_height);
+        HandleCoinCollection(&player);  // Handle coin collection here
 
         BeginDrawing();
 
@@ -278,13 +303,23 @@ int main() {
                 }
             }
 
-            // Draw coin using the updated coin_source
-            DrawTextureRec(coin, player.animation.coin_source, 
-                (Vector2){ platforms[1].position.x + 40, platforms[1].position.y - 27 }, WHITE);
-            EndDrawing();
+            // Draw coins
+            for (int i = 0; i < MAX_COINS; i++) {
+                if (!coins[i].collected) {
+                    DrawTextureRec(coin, player.animation.coin_source, coins[i].position, WHITE);
+                }
+            }
+
+            // Display score
+            DrawText(TextFormat("Score: %d", score), 10, 10, 20, DARKGRAY);
+
+        EndDrawing();
     }
-    
+
     UnloadTexture(idle);
+    UnloadTexture(run);
+    UnloadTexture(background);
+    UnloadTexture(coin);
     CloseWindow();
     return 0;
 }

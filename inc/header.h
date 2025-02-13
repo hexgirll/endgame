@@ -10,6 +10,7 @@
 #define DASH_SPEED_MULTIPLIER 5
 #define DASH_DURATION 0.2f
 #define DASH_COOLDOWN 0.5f
+#define MAX_COINS 10
 
 Texture2D idle;
 Texture2D background;
@@ -34,7 +35,6 @@ typedef enum  {
     COIN_A,
     PICK_UP_A
 } e_animation;
-
 
 typedef struct {
     Rectangle run_source;
@@ -62,6 +62,11 @@ typedef struct {
 
 typedef struct {
     Vector2 position;
+    bool collected;
+} t_coin;
+
+typedef struct {
+    Vector2 position;
     Vector2 size;
     Texture2D texture;
     float scaleX, scaleY;
@@ -70,5 +75,8 @@ typedef struct {
 
 #define PLATFORM_COUNT 24
 Platform platforms[PLATFORM_COUNT];
+
+t_coin coins[MAX_COINS];
+int score;
 
 #endif
