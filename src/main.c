@@ -1,8 +1,9 @@
 #include "header.h"
 
-Texture2D sprite;
+Texture2D idle;
 Texture2D background;
 Texture2D run;
+Texture2D idle;
 
 typedef struct {
     int x;
@@ -42,16 +43,17 @@ int main() {
     SetTargetFPS(60);
  
     background = LoadTexture("resource/textures/background.png");
-    sprite = LoadTexture("resource/textures/nindzia.png");
     run = LoadTexture("resource/textures/run.png");
+    idle = LoadTexture("resource/textures/nindzia.png");
 
     Rectangle run_source = {0.f , 0.f, (float)run.width / 6.f, (float)run.height};
+    Rectangle idle_source = {0.f , 0.f, (float)idle.width, (float)idle.height};
 
     t_player player = {
         .x = window_width / 2,
-        .y = window_height - sprite.height,
-        .width = sprite.width,
-        .height = sprite.height,
+        .y = window_height - idle.height,
+        .width = idle.width,
+        .height = idle.height,
         .velocity = 3,
         .speed = 3,
         .direction = RIGHT,
@@ -61,8 +63,12 @@ int main() {
     e_move move = IDLE;
 
     int frame = 0;
-    float running_time = 0;
-    const float update_time = 1.f/12.f;
+    float running_time = 0.0f;
+    //float idle_time = 0.0f;
+    const float update_time = 1.0f/12.0f;
+    float breathing_time = 0.0f;
+    const float breathing_speed = 7.0f;
+    float breathing_offset = 0.0f;
 
     while (!WindowShouldClose()) {
 
@@ -75,6 +81,7 @@ int main() {
             player.y = window_height - player.height;
 
             if(IsKeyPressed(KEY_SPACE)) {
+                move = JUMP;
                 player.velocity = -20;
             }
         }
@@ -134,6 +141,14 @@ int main() {
             }
         }
 
+        if (move == IDLE) {
+            breathing_time += delta_time * breathing_speed;
+            breathing_offset = sinf(breathing_time);  // breathing effect
+        } 
+        else {
+            breathing_offset = 0;
+        }
+
         player.y += player.velocity;
 
         BeginDrawing();
@@ -150,32 +165,69 @@ int main() {
             if (move == DASH) {
                 for (int i = 0; i < 5; i++) {
                     float offset = (i - 2) * 2.0f;
-                    DrawTexture(sprite, player.x + offset, player.y + offset, (Color){255, 255, 255, 50});
+                    DrawTexture(idle, player.x + offset, player.y + offset, (Color){255, 255, 255, 50});
                 }
             }
 
             if (move == RUN || move == DASH) {
                 if (player.direction == RIGHT) {
-                    DrawTexturePro(run, run_source, (Rectangle){player.x, player.y, player.width, player.height}, (Vector2){0, 0}, 0, WHITE);
+                    Rectangle src = run_source;
+                    Rectangle dst = (Rectangle){
+                        player.x,
+                        player.y,
+                        player.width,
+                        player.height
+                    };
+                    DrawTexturePro(run, src, dst, (Vector2){0, 0}, 0, WHITE);
                 } else {
                     // smotrit vlevo
-                    DrawTexturePro(run, (Rectangle){run_source.x + run_source.width, run_source.y, -run_source.width, run_source.height}, 
-                                  (Rectangle){player.x, player.y, player.width, player.height}, (Vector2){0, 0}, 0, WHITE);
+                    Rectangle src = (Rectangle) {
+                        run_source.x + run_source.width,
+                        run_source.y,
+                        -run_source.width,
+                        run_source.height
+                    };
+                    Rectangle dst = (Rectangle) {
+                        player.x,
+                        player.y,
+                        player.width,
+                        player.height
+                    };
+                    DrawTexturePro(run, src, dst, (Vector2){0, 0}, 0, WHITE);
                 }
             } 
-            else {
+            if (move == IDLE) {
                 if (player.direction == RIGHT) {
-                    DrawTexturePro(sprite, (Rectangle){0, 0, sprite.width, sprite.height}, (Rectangle){player.x, player.y, player.width, player.height}, (Vector2){0, 0}, 0, WHITE);
-                } else {
+                    Rectangle src = idle_source;
+                    Rectangle dst = (Rectangle) {
+                        player.x,
+                        player.y - 2 + breathing_offset,
+                        player.width,
+                        player.height
+                    };
+                    DrawTexturePro(idle, src, dst, (Vector2){0, 0}, 0, WHITE);
+                } 
+                else {
                     // smotrit vlevo
-                    DrawTexturePro(sprite, (Rectangle){sprite.width, 0, -sprite.width, sprite.height}, 
-                                  (Rectangle){player.x, player.y, player.width, player.height}, (Vector2){0, 0}, 0, WHITE);
+                    Rectangle src = (Rectangle) {
+                        idle_source.x + idle_source.width,
+                        idle_source.y,
+                        -idle_source.width,
+                        idle_source.height
+                    };
+                    Rectangle dst = (Rectangle) {
+                        player.x,
+                        player.y - 2 + breathing_offset,
+                        player.width,
+                        player.height
+                    };
+                    DrawTexturePro(idle, src, dst, (Vector2){0, 0}, 0, WHITE);
                 }
             }
         EndDrawing();
     }
     
-    UnloadTexture(sprite);
+    UnloadTexture(idle);
     CloseWindow();
     return 0;
 }

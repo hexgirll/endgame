@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <unistd.h>
+#include <math.h>
 
 #define DASH_SPEED_MULTIPLIER 5
 #define DASH_DURATION 0.2f
