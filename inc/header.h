@@ -7,14 +7,18 @@
 #include <unistd.h>
 #include <math.h>
 
-#define DASH_SPEED_MULTIPLIER 5
+#define DASH_SPEED_MULTIPLIER 4
 #define DASH_DURATION 0.2f
 #define DASH_COOLDOWN 0.5f
+#define PLATFORM_COUNT 21
+#define M_PLATFORM_COUNT 3
+#define MAX_COINS 10
 
 Texture2D idle;
 Texture2D background;
 Texture2D run;
 Texture2D coin;
+Texture2D portal;
 
 typedef enum {
     RIGHT,
@@ -45,7 +49,10 @@ typedef struct {
     float breathing_offset;
     Rectangle coin_source;
     int coin_frame;
-    float coin_running_time;
+    float coin_time;
+    Rectangle portal_source;
+    int portal_frame;
+    float portal_time;
 } t_animation_data;
 
 typedef struct {
@@ -66,9 +73,27 @@ typedef struct {
     Texture2D texture;
     float scaleX, scaleY;
     float grassHeight;
-} Platform;
+} t_platform;
 
-#define PLATFORM_COUNT 24
-Platform platforms[PLATFORM_COUNT];
+typedef struct {
+    Vector2 position;
+    bool collected;
+} t_coin;
+
+typedef struct {
+    Vector2 position;
+    Vector2 size;
+    Vector2 startPos;
+    Vector2 endPos;
+    Texture2D texture;
+    float scaleX, scaleY;
+    float grassHeight;
+    float speed;   
+    int movingRight; 
+} t_moving_platform;
+
+t_platform platforms[PLATFORM_COUNT];
+t_moving_platform m_platforms [M_PLATFORM_COUNT];
+t_coin coins[MAX_COINS];
 
 #endif
