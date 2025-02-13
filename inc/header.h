@@ -10,7 +10,7 @@
 #define DASH_SPEED_MULTIPLIER 5
 #define DASH_DURATION 0.2f
 #define DASH_COOLDOWN 0.5f
-#define MAX_COINS 10
+#define MAX_COINS 7
 
 Texture2D idle;
 Texture2D background;
