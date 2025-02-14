@@ -7,20 +7,21 @@
 #include <unistd.h>
 #include <math.h>
 #include <stdlib.h>
+#include <string.h>
 
+#define SCREEN_WIDTH 1600
+#define SCREEN_HEIGHT 900
 #define DASH_SPEED_MULTIPLIER 4
 #define DASH_DURATION 0.2f
 #define DASH_COOLDOWN 0.5f
-#define PLATFORM_COUNT 21
-#define M_PLATFORM_COUNT 3
 #define MAX_COINS 7
-#define SCREEN_WIDTH 1600
-#define SCREEN_HEIGHT 900
+#define GRAVITY 1.0f
 
 
 typedef enum {
     MENU,
-    LEVEL1
+    LEVEL1,
+    LEVEL2
 } e_game_state;
 
 typedef enum {
@@ -95,6 +96,24 @@ typedef struct {
     int movingRight; 
 } t_moving_platform;
 
+void init_level(e_game_state current_state, t_platform *platforms, t_moving_platform *m_platforms, t_coin *coins);
+void update_moving_platforms(t_moving_platform *m_platforms, int moving_platform_count);
+void draw_level(t_platform *platforms, int platform_count, t_moving_platform *m_platforms, int moving_platform_count);
+bool check_collision(t_player player, Vector2 plat_pos, Vector2 plat_size);
+bool check_bottom_collision(t_player player, Vector2 plat_pos, Vector2 plat_size);
+void handle_platforms_collision(t_player *player, t_platform *platforms, int platform_count, t_moving_platform *m_platforms, int moving_platform_count);
 void create_menu();
+void handle_movement(t_player *player, e_move *move, e_animation *animation, Sound grass_running);
+void update_animation(t_player *player, e_animation animation, Texture2D run, Texture2D coin, Texture2D portal);
+void init_coins(t_coin *coins);
+bool CheckCoinCollision(t_player player, t_coin coin);
+void handle_coin_collision(t_player *player, int *score, t_coin *coins);
+void draw_coins(t_coin *coins, t_player player, Texture2D coin);
+void draw_background(Texture2D background);
+void draw_player(e_move move, t_player player, Texture2D idle, Texture2D run);
+void draw_portal(t_player player, float *countdown, float *last_time, int *score, Texture2D portal);
+bool check_portal_collision(t_player player, Vector2 portal_position);
+
+
 
 #endif
