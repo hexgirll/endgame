@@ -6,19 +6,22 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include <math.h>
+#include <stdlib.h>
 
 #define DASH_SPEED_MULTIPLIER 4
 #define DASH_DURATION 0.2f
 #define DASH_COOLDOWN 0.5f
 #define PLATFORM_COUNT 21
 #define M_PLATFORM_COUNT 3
-#define MAX_COINS 10
+#define MAX_COINS 7
+#define SCREEN_WIDTH 1600
+#define SCREEN_HEIGHT 900
 
-Texture2D idle;
-Texture2D background;
-Texture2D run;
-Texture2D coin;
-Texture2D portal;
+
+typedef enum {
+    MENU,
+    LEVEL1
+} e_game_state;
 
 typedef enum {
     RIGHT,
@@ -92,8 +95,6 @@ typedef struct {
     int movingRight; 
 } t_moving_platform;
 
-t_platform platforms[PLATFORM_COUNT];
-t_moving_platform m_platforms [M_PLATFORM_COUNT];
-t_coin coins[MAX_COINS];
+void create_menu();
 
 #endif
