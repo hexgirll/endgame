@@ -21,7 +21,8 @@
 typedef enum {
     MENU,
     LEVEL1,
-    LEVEL2
+    LEVEL2,
+    GAME_OVER
 } e_game_state;
 
 typedef enum {
@@ -113,6 +114,7 @@ void draw_background(Texture2D background);
 void draw_player(e_move move, t_player player, Texture2D idle, Texture2D run);
 void draw_portal(t_player player, float *countdown, float *last_time, int *score, Texture2D portal);
 bool check_portal_collision(t_player player, Vector2 portal_position);
+void game_over(void);
 
 
 

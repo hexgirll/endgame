@@ -12,6 +12,7 @@ int main() {
     Texture2D idle = LoadTexture("resource/textures/nindzia.png");
     Texture2D coin = LoadTexture("resource/textures/coin.png");
     Texture2D portal = LoadTexture("resource/textures/portal.png");
+    Texture2D ghost = LoadTexture("resource/textures/boo.png");
 
     // Menu textures
     Texture2D button_texture_1 = LoadTexture("resource/textures/menu1.png");
@@ -26,6 +27,8 @@ int main() {
     SetMusicVolume(music, 0.5f);
     Sound grass_running = LoadSound("resource/audio/grass_running.mp3");
     SetSoundVolume(grass_running, 0.5f);
+    Sound lose = LoadSound("resource/audio/lose.mp3");
+    SetSoundVolume(lose, 0.5f);
     bool is_muted = false;
     float music_volume = 0.5f;
 
@@ -106,6 +109,10 @@ int main() {
             handle_platforms_collision(&player, platforms, platform_count, m_platforms, moving_platform_count);
             handle_coin_collision(&player, &score, coins);
 
+            if (player.y + player.height >= SCREEN_HEIGHT) {
+                current_state = GAME_OVER;
+            }
+
             BeginDrawing();
                 ClearBackground(WHITE);
 
@@ -146,6 +153,10 @@ int main() {
             handle_platforms_collision(&player, platforms, platform_count, m_platforms, moving_platform_count);
             handle_coin_collision(&player, &score, coins);
 
+            if (player.y + player.height >= SCREEN_HEIGHT) {
+                current_state = GAME_OVER;
+            }
+
             BeginDrawing();
                 ClearBackground(WHITE);
 
@@ -160,7 +171,49 @@ int main() {
                 // Display score
                 DrawText(TextFormat("Score: %d", score), 10, 10, 20, WHITE);
 
+
             EndDrawing();
+        }
+        else if (current_state == GAME_OVER) {
+            static double death_time = 0; 
+            static bool ghost_displayed = false; 
+            static bool lose_sound_played = false;  
+
+            if (!lose_sound_played) {  
+                StopMusicStream(music);
+                StopSound(grass_running);
+                PlaySound(lose); 
+                lose_sound_played = true; 
+            }
+
+            if (!ghost_displayed) {
+                player.animation.idle_source = (Rectangle){0.f, 0.f, (float)ghost.width, (float)ghost.height};
+                death_time = GetTime(); 
+                ghost_displayed = true;
+            }
+
+            BeginDrawing();
+            ClearBackground(WHITE);
+            draw_background(background); 
+            draw_level(platforms, platform_count, m_platforms, moving_platform_count);
+            draw_player(IDLE, player, ghost, run);
+            draw_coins(coins, player, coin);
+            
+            if (GetTime() - death_time > 1.5) {
+                game_over(); 
+            }
+            
+            EndDrawing();
+            
+            if (IsKeyPressed(KEY_ENTER)) {
+                current_state = MENU;
+                player.x = 10;
+                player.y = 736;
+                score = 0;
+                initialized = false;
+                unloaded = false;
+                lose_sound_played = false; 
+            }
         }
     }
 
@@ -174,6 +227,7 @@ int main() {
     UnloadTexture(off_sound_button);
     UnloadTexture(on_sound_button);
     UnloadTexture(game_name);
+    UnloadTexture(ghost);
     for (int i = 0; i < 6; i++) {
         UnloadTexture(platforms[i].texture);
     }
