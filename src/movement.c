@@ -2,11 +2,15 @@
 
 void handle_movement(t_player *player, e_move *move, e_animation *animation, Sound grass_running) {
     float current_time = GetTime();
+    static bool was_in_air = false;
+
+    bool is_on_ground = (player->velocity == 0);
 
     // Jump
-    if (player->velocity == 0 && IsKeyPressed(KEY_SPACE)) {
+    if (is_on_ground && IsKeyPressed(KEY_SPACE)) {
         *move = JUMP;
         player->velocity = -23;
+        was_in_air = true;
     }
     player->velocity += GRAVITY;
     player->y += player->velocity;
@@ -14,13 +18,13 @@ void handle_movement(t_player *player, e_move *move, e_animation *animation, Sou
     // Dash
     if (IsKeyPressed(KEY_LEFT_SHIFT) && (current_time - player->last_dash_time > DASH_COOLDOWN)) {
         *move = DASH;
-        player->last_dash_time = current_time; // Reset dash cooldown
+        player->last_dash_time = current_time; 
     }
 
     // Apply dash
     if (*move == DASH) {
         if (current_time - player->last_dash_time > DASH_DURATION) {
-            *move = IDLE; // Stop dashing after duration
+            *move = IDLE;
         } else {
             if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D)) {
                 player->x += player->speed * DASH_SPEED_MULTIPLIER;
@@ -41,8 +45,8 @@ void handle_movement(t_player *player, e_move *move, e_animation *animation, Sou
             player->direction = RIGHT;
             player->x += player->speed;
 
-            if (!IsSoundPlaying(grass_running)) {
-                PlaySound(grass_running);  // Play sound only if not already playing
+            if (is_on_ground && (!IsSoundPlaying(grass_running) || was_in_air)) {
+                PlaySound(grass_running);
             }
         } 
         else if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A)) {
@@ -51,16 +55,19 @@ void handle_movement(t_player *player, e_move *move, e_animation *animation, Sou
             player->direction = LEFT;
             player->x -= player->speed;
 
-            if (!IsSoundPlaying(grass_running)) {
-                PlaySound(grass_running);  // Play sound only if not already playing
+            if (is_on_ground && (!IsSoundPlaying(grass_running) || was_in_air)) {
+                PlaySound(grass_running);
             }
         } 
         else {
             *move = IDLE;
             *animation = IDLE_A;
             if (IsSoundPlaying(grass_running)) {
-                StopSound(grass_running);  // Stop the sound if idle
+                StopSound(grass_running);
             }
         }
     }
+
+    was_in_air = !is_on_ground;
 }
+

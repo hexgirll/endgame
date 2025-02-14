@@ -33,6 +33,6 @@ void draw_portal(t_player player, float *countdown, float *last_time, int *score
 bool check_portal_collision(t_player player, Vector2 portal_position) {
     return (player.x < portal_position.x + player.animation.portal_source.width &&
             player.x + player.width > portal_position.x &&
-            player.y < portal_position.y + player.animation.coin_source.height &&
+            player.y < portal_position.y + player.animation.portal_source.height &&
             player.y + player.height > portal_position.y);
 }

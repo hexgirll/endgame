@@ -62,9 +62,4 @@ void handle_platforms_collision(t_player *player, t_platform *platforms, int pla
     if (!on_platform) {
         player->velocity += 1;
     }
-
-    if (player->y + player->height > SCREEN_HEIGHT) {
-        player->y = SCREEN_HEIGHT - player->height;
-        player->velocity = 0;
-    }
 }
