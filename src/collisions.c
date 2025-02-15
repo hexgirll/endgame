@@ -25,8 +25,6 @@ bool check_bottom_collision(t_player player, Vector2 plat_pos, Vector2 plat_size
             player.y + player.height > plat_pos.y + (plat_size.y / 2));
 }
 
-
-
 void handle_platforms_collision(t_player *player, t_platform *platforms, int platform_count, t_moving_platform *m_platforms, int moving_platform_count) {
     bool on_platform = false;
 

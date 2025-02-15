@@ -13,6 +13,8 @@ int main() {
     Texture2D coin = LoadTexture("resource/textures/coin.png");
     Texture2D portal = LoadTexture("resource/textures/portal.png");
     Texture2D ghost = LoadTexture("resource/textures/boo.png");
+    Texture2D pause_button = LoadTexture("resource/textures/pause_button.png");
+    Texture2D play_button = LoadTexture("resource/textures/play_button.png");
 
     // Menu textures
     Texture2D button_texture_1 = LoadTexture("resource/textures/menu1.png");
@@ -26,7 +28,7 @@ int main() {
     Music music = LoadMusicStream("resource/audio/menu.mp3");
     SetMusicVolume(music, 0.5f);
     Sound grass_running = LoadSound("resource/audio/grass_running.mp3");
-    SetSoundVolume(grass_running, 0.5f);
+    SetSoundVolume(grass_running, 0.3f);
     Sound lose = LoadSound("resource/audio/lose.mp3");
     SetSoundVolume(lose, 0.5f);
     bool is_muted = false;
@@ -60,7 +62,6 @@ int main() {
         }
     };
 
-
     t_platform platforms[30];
     t_moving_platform m_platforms[10];
     t_coin coins[MAX_COINS];
@@ -69,6 +70,10 @@ int main() {
     int moving_platform_count = 0;
 
     Vector2 portal_position = (Vector2) {1500, 700};
+    Vector2 pause_button_position = (Vector2) {SCREEN_WIDTH / 2 - pause_button.width,
+                                               SCREEN_HEIGHT - pause_button.height + 25};
+    bool is_paused = false;
+
     e_move move = IDLE;
     e_animation animation = IDLE_A;
 
@@ -81,6 +86,7 @@ int main() {
     float last_time = GetTime();
 
     while (!WindowShouldClose()) {
+        UpdateMusicStream(music);
 
         if (current_state == MENU) {
             create_menu(&current_state, &music, background, button_texture_1, button_texture_2, 
@@ -90,12 +96,22 @@ int main() {
 
         // Update and draw Level 1
         else if (current_state == LEVEL1) {
-
+            SetMusicVolume(music, 0.2f);
             if(!initialized) {
                 platform_count = 21;
                 moving_platform_count = 3;
                 init_level(current_state, platforms, m_platforms, coins);
                 initialized = true;
+            }
+
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                Vector2 mouse = GetMousePosition();
+
+
+                if (CheckCollisionPointRec(mouse, (Rectangle){pause_button_position.x, pause_button_position.y, pause_button.width, pause_button.height})) {
+                    is_paused = !is_paused;
+                    current_state = is_paused ? PAUSE : LEVEL1;
+                }
             }
 
             if (score == MAX_COINS && check_portal_collision(player, portal_position)) {
@@ -114,22 +130,30 @@ int main() {
             }
 
             BeginDrawing();
-                ClearBackground(WHITE);
+            ClearBackground(WHITE);
+        
+            draw_background(background);
 
-                draw_background(background);
+            if (is_paused) {
+                DrawTextureEx(play_button, pause_button_position, 0.0f, 0.55f, WHITE);
+            } 
+            else {
+                DrawTextureEx(pause_button, pause_button_position, 0.0f, 0.55f, WHITE);
+            }
+        
+            draw_level(platforms, platform_count, m_platforms, moving_platform_count);
+            draw_player(move, player, idle, run);
+        
+            draw_coins(coins, player, coin);
+            draw_portal(player, &countdown, &last_time, &score, portal);
 
-                draw_level(platforms, platform_count, m_platforms, moving_platform_count);
-                draw_player(move, player, idle, run);
-
-                draw_coins(coins, player, coin);
-                draw_portal(player, &countdown, &last_time, &score, portal);
-
-                // Display score
-                DrawText(TextFormat("Score: %d", score), 10, 10, 20, WHITE);
+            // Display score
+            DrawText(TextFormat("Score: %d", score), 10, 10, 20, WHITE);
 
             EndDrawing();
         }
         else if (current_state == LEVEL2) {
+            SetMusicVolume(music, 0.2f);
             if (!unloaded) {
                 for (int i = 0; i < 21; i++) {
                     UnloadTexture(platforms[i].texture);
@@ -146,6 +170,16 @@ int main() {
                 init_level(current_state, platforms, m_platforms, coins);
                 initialized = true;
             }
+
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                Vector2 mouse = GetMousePosition();
+
+                if (CheckCollisionPointRec(mouse, (Rectangle){pause_button_position.x, pause_button_position.y, pause_button.width, pause_button.height})) {
+                    is_paused = !is_paused;
+                    current_state = is_paused ? PAUSE : LEVEL2;
+                }
+            }
+
             score = 0;
             update_moving_platforms(m_platforms, moving_platform_count);
             handle_movement(&player, &move, &animation, grass_running);
@@ -161,6 +195,13 @@ int main() {
                 ClearBackground(WHITE);
 
                 draw_background(background);
+
+                if (is_paused) {
+                    DrawTextureEx(play_button, pause_button_position, 0.0f, 0.55f, WHITE);
+                } 
+                else {
+                    DrawTextureEx(pause_button, pause_button_position, 0.0f, 0.55f, WHITE);
+                }
 
                 draw_level(platforms, platform_count, m_platforms, moving_platform_count);
                 draw_player(move, player, idle, run);

@@ -1,7 +1,5 @@
 #include "header.h"
 
-#include "header.h"
-
 void draw_portal(t_player player, float *countdown, float *last_time, int *score, Texture2D portal) {
     if (*score == MAX_COINS) {
         // TIMER
@@ -28,7 +26,6 @@ void draw_portal(t_player player, float *countdown, float *last_time, int *score
         *last_time = GetTime(); // Reset last_time properly
     }
 }
-
 
 bool check_portal_collision(t_player player, Vector2 portal_position) {
     return (player.x < portal_position.x + player.animation.portal_source.width &&

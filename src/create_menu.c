@@ -25,7 +25,7 @@ static void draw_play_exit_buttons(Texture2D button_texture_1, Texture2D button_
         exit_button.y + (exit_button.height - 40) / 2, 40, brown_text);
 }
 
-static void draw_sound_button(Texture2D off_sound_button, Texture2D on_sound_button, Rectangle sound_button_rect, bool is_muted) {
+void draw_sound_button(Texture2D off_sound_button, Texture2D on_sound_button, Rectangle sound_button_rect, bool is_muted) {
     Texture2D sound_button_texture;
 
     if (is_muted) {
@@ -68,6 +68,7 @@ static void handle_mouse_clicks(Vector2 mouse_point, Rectangle play_button, Rect
 void create_menu(e_game_state *current_state, Music *music, Texture2D background, Texture2D button_texture_1, Texture2D button_texture_2, 
                  Texture2D off_sound_button, Texture2D on_sound_button, Texture2D game_name, bool *is_muted, float *music_volume) {
     float scale = 1.7f;
+
     Rectangle play_button = {SCREEN_WIDTH / 2 - (button_texture_1.width * scale) / 2,
                              SCREEN_HEIGHT / 2 - (button_texture_1.height * scale) / 2,
                              button_texture_1.width * scale, button_texture_1.height * scale};
