@@ -251,6 +251,7 @@ int main() {
                 player.x = 10;
                 player.y = 736;
                 score = 0;
+                countdown = 10.0f;
                 initialized = false;
                 unloaded = false;
                 lose_sound_played = false; 
