@@ -3,14 +3,14 @@ NAME = endgame
 SRCDIR = src
 INCDIR = inc
 OBJDIR = obj
-RESOURCEDIR = resource/raylib/src
+LIBDIR = resource/raylib/lib
 
 SRC_FILES = $(wildcard $(SRCDIR)/*.c)
 OBJ_FILES = $(SRC_FILES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
 CC = clang
-CFLAGS = -Wall -Wextra -Werror -std=c11 -I$(INCDIR) -I$(RESOURCEDIR)
-LFLAGS = -L$(RESOURCEDIR) -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+CFLAGS = -Wall -Wextra -Werror -std=c11 -I$(INCDIR)
+LFLAGS = $(LIBDIR)/libraylib.a -lm -ldl -lpthread
 
 all: $(NAME)
 

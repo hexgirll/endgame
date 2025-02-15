@@ -7,11 +7,15 @@ bool check_coin_collision(t_player player, t_coin coin) {
             player.y + player.height > coin.position.y);
 }
 
-void handle_coin_collision(t_player *player, int *score, t_coin *coins) {
+void handle_coin_collision(t_player *player, int *score, t_coin *coins, Sound coin_pickup) {
     for (int i = 0; i < MAX_COINS; i++) {
         if (!coins[i].collected && check_coin_collision(*player, coins[i])) {
             coins[i].collected = true;
             (*score)++;
+            if (!IsSoundPlaying(coin_pickup)) {
+            PlaySound(coin_pickup);
+            
+            }
         }
     }
 }
