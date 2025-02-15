@@ -126,6 +126,7 @@ int main() {
                 if (IsKeyPressed(KEY_ESCAPE)) {
                     current_state = MENU;
                     is_paused = !is_paused;
+                    countdown = 10.0f;
                 }
             }
             
@@ -186,8 +187,10 @@ int main() {
             }
 
             if (is_paused) {
-                if(IsKeyPressed(KEY_ENTER)) {
+                if(IsKeyPressed(KEY_ESCAPE)) {
                     current_state = MENU;
+                    is_paused = !is_paused;
+                    countdown = 10.0f;
                 }
             }
             BeginDrawing();
@@ -242,6 +245,7 @@ int main() {
                 player.x = 10;
                 player.y = 736;
                 score = 0;
+                countdown = 10.0f;
                 initialized = false;
                 unloaded = false;
                 lose_sound_played = false; 
