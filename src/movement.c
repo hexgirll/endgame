@@ -1,6 +1,6 @@
 #include "header.h"
 
-void handle_movement(t_player *player, e_move *move, e_animation *animation, Sound grass_running) {
+void handle_movement(t_player *player, e_move *move, e_animation *animation, Sound grass_running, Sound jump_sound) {
     float current_time = GetTime();
     static bool was_in_air = false;
 
@@ -11,6 +11,10 @@ void handle_movement(t_player *player, e_move *move, e_animation *animation, Sou
         *move = JUMP;
         player->velocity = -23;
         was_in_air = true;
+        
+        if (!IsSoundPlaying(jump_sound)) {
+            PlaySound(jump_sound);
+        }
     }
     player->velocity += GRAVITY;
     player->y += player->velocity;

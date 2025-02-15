@@ -28,6 +28,10 @@ int main() {
     SetMusicVolume(music, 0.5f);
     Sound grass_running = LoadSound("resource/audio/grass_running.mp3");
     SetSoundVolume(grass_running, 0.5f);
+    Sound jump_sound = LoadSound("resource/audio/jump_sound.mp3");
+    SetSoundVolume(jump_sound, 0.5f);
+    Sound coin_pickup = LoadSound("resource/audio/coin_pickup.mp3");
+    SetSoundVolume(coin_pickup, 0.5f);
     Sound lose = LoadSound("resource/audio/lose.mp3");
     SetSoundVolume(lose, 0.5f);
     bool is_muted = false;
@@ -116,10 +120,10 @@ int main() {
 
             if (!is_paused) {
                 update_moving_platforms(m_platforms, moving_platform_count);
-                handle_movement(&player, &move, &animation, grass_running);
+                handle_movement(&player, &move, &animation, grass_running,jump_sound);
                 update_animation(&player, animation, run, coin, portal);
                 handle_platforms_collision(&player, platforms, platform_count, m_platforms, moving_platform_count);
-                handle_coin_collision(&player, &score, coins);
+                handle_coin_collision(&player, &score, coins, coin_pickup);
             }
 
             if (is_paused) {
@@ -179,10 +183,10 @@ int main() {
 
             if (!is_paused) {
                 update_moving_platforms(m_platforms, moving_platform_count);
-                handle_movement(&player, &move, &animation, grass_running);
+                handle_movement(&player, &move, &animation, grass_running,jump_sound);
                 update_animation(&player, animation, run, coin, portal);
                 handle_platforms_collision(&player, platforms, platform_count, m_platforms, moving_platform_count);
-                handle_coin_collision(&player, &score, coins);
+                handle_coin_collision(&player, &score, coins, coin_pickup);
             }
 
             if (is_paused) {

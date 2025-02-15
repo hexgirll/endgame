@@ -105,11 +105,11 @@ bool check_bottom_collision(t_player player, Vector2 plat_pos, Vector2 plat_size
 void handle_platforms_collision(t_player *player, t_platform *platforms, int platform_count, t_moving_platform *m_platforms, int moving_platform_count);
 void create_menu(e_game_state *current_state, Music *music, Texture2D background, Texture2D button_texture_1, Texture2D button_texture_2, 
                  Texture2D off_sound_button, Texture2D on_sound_button, Texture2D game_name, bool *is_muted, float *music_volume);
-void handle_movement(t_player *player, e_move *move, e_animation *animation, Sound grass_running);
+void handle_movement(t_player *player, e_move *move, e_animation *animation, Sound grass_running, Sound jump_sound);
 void update_animation(t_player *player, e_animation animation, Texture2D run, Texture2D coin, Texture2D portal);
 void init_coins(t_coin *coins);
 bool check_coin_collision(t_player player, t_coin coin);
-void handle_coin_collision(t_player *player, int *score, t_coin *coins);
+void handle_coin_collision(t_player *player, int *score, t_coin *coins, Sound coin_pickup);
 void draw_coins(t_coin *coins, t_player player, Texture2D coin);
 void draw_background(Texture2D background);
 void draw_player(e_move move, t_player player, Texture2D idle, Texture2D run);
