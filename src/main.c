@@ -110,7 +110,7 @@ int main() {
 
                 if (CheckCollisionPointRec(mouse, (Rectangle){pause_button_position.x, pause_button_position.y, pause_button.width, pause_button.height})) {
                     is_paused = !is_paused;
-                    previous_state = current_state; // Зберігаємо поточний стан перед паузою
+                    previous_state = current_state;
                     current_state = is_paused ? PAUSE : LEVEL1;
                 }
             }
