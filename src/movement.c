@@ -1,21 +1,31 @@
 #include "header.h"
 
-void handle_movement(t_player *player, e_move *move, e_animation *animation, Sound grass_running, Sound jump_sound) {
+void handle_movement(e_game_state current_state, t_player *player, e_move *move, e_animation *animation, Sound grass_running, Sound jump_sound) {
     float current_time = GetTime();
     static bool was_in_air = false;
+    static bool can_double_jump = false;
 
     bool is_on_ground = (player->velocity == 0);
 
     // Jump
-    if (is_on_ground && IsKeyPressed(KEY_SPACE)) {
+    if (is_on_ground) {
+        can_double_jump = (current_state == LEVEL2);
+    }
+    
+    if ((is_on_ground || (can_double_jump && current_state == LEVEL2)) && IsKeyPressed(KEY_SPACE)) {
         *move = JUMP;
         player->velocity = -23;
         was_in_air = true;
         
+        if (!is_on_ground) {
+            can_double_jump = false;
+        }
+
         if (!IsSoundPlaying(jump_sound)) {
             PlaySound(jump_sound);
         }
     }
+    
     player->velocity += GRAVITY;
     player->y += player->velocity;
 
@@ -74,4 +84,3 @@ void handle_movement(t_player *player, e_move *move, e_animation *animation, Sou
 
     was_in_air = !is_on_ground;
 }
-

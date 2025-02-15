@@ -97,7 +97,6 @@ int main() {
 
         // Update and draw Level 1
         else if (current_state == LEVEL1) {
-
             if (IsKeyPressed(KEY_P)) {
                 is_paused = !is_paused;
             }
@@ -106,13 +105,17 @@ int main() {
                 platform_count = 21;
                 moving_platform_count = 3;
                 init_level(current_state, platforms, m_platforms, coins);
+                player.x = 10;
+                player.y = 736;
+                countdown = 10.f;
+                score = 0;
+                portal_position = (Vector2) {1500, 700};
                 initialized = true;
             }
 
             if (player.y + player.height >= SCREEN_HEIGHT) {
                 current_state = GAME_OVER;
             }
-
             if (score == MAX_COINS && check_portal_collision(player, portal_position)) {
                 current_state = LEVEL2;
                 initialized = false;
@@ -120,7 +123,7 @@ int main() {
 
             if (!is_paused) {
                 update_moving_platforms(m_platforms, moving_platform_count);
-                handle_movement(&player, &move, &animation, grass_running,jump_sound);
+                handle_movement(current_state, &player, &move, &animation, grass_running, jump_sound);
                 update_animation(&player, animation, run, coin, portal);
                 handle_platforms_collision(&player, platforms, platform_count, m_platforms, moving_platform_count);
                 handle_coin_collision(&player, &score, coins, coin_pickup);
@@ -130,6 +133,7 @@ int main() {
                 if (IsKeyPressed(KEY_ESCAPE)) {
                     current_state = MENU;
                     is_paused = !is_paused;
+                    countdown = 10.0f;
                 }
             }
             
@@ -147,7 +151,7 @@ int main() {
                 draw_hint(player);
 
                 draw_coins(coins, player, coin);
-                draw_portal(player, &countdown, &last_time, &score, portal);
+                draw_portal(current_state, player, &countdown, &last_time, &score, portal);
 
                 // Display score
                 DrawText(TextFormat("Score: %d", score), 10, 10, 20, WHITE);
@@ -173,7 +177,11 @@ int main() {
                 platform_count = 6; // Static array size
                 moving_platform_count = 5; // Static array size
                 init_level(current_state, platforms, m_platforms, coins);
+                player.x = 10;
+                player.y = 650;
+                countdown = 10.f;
                 score = 0;
+                portal_position = (Vector2) {50, 120};
                 initialized = true;
             }
 
@@ -181,17 +189,24 @@ int main() {
                 current_state = GAME_OVER;
             }
 
+            if (score == MAX_COINS && check_portal_collision(player, portal_position)) {
+                current_state = MENU;
+                initialized = false;
+            }
+
             if (!is_paused) {
                 update_moving_platforms(m_platforms, moving_platform_count);
-                handle_movement(&player, &move, &animation, grass_running,jump_sound);
+                handle_movement(current_state, &player, &move, &animation, grass_running, jump_sound);
                 update_animation(&player, animation, run, coin, portal);
                 handle_platforms_collision(&player, platforms, platform_count, m_platforms, moving_platform_count);
                 handle_coin_collision(&player, &score, coins, coin_pickup);
             }
 
             if (is_paused) {
-                if(IsKeyPressed(KEY_ENTER)) {
+                if(IsKeyPressed(KEY_ESCAPE)) {
                     current_state = MENU;
+                    is_paused = !is_paused;
+                    countdown = 10.0f;
                 }
             }
             BeginDrawing();
@@ -203,12 +218,11 @@ int main() {
                 draw_player(move, player, idle, run);
 
                 draw_coins(coins, player, coin);
-                draw_portal(player, &countdown, &last_time, &score, portal);
+                draw_portal(current_state, player, &countdown, &last_time, &score, portal);
 
                 // Display score
                 DrawText(TextFormat("Score: %d", score), 10, 10, 20, WHITE);
-
-            EndDrawing();
+              EndDrawing();
         }
         else if (current_state == GAME_OVER) {
             static double death_time = 0; 
@@ -246,6 +260,7 @@ int main() {
                 player.x = 10;
                 player.y = 736;
                 score = 0;
+                countdown = 10.0f;
                 initialized = false;
                 unloaded = false;
                 lose_sound_played = false; 
@@ -275,3 +290,6 @@ int main() {
     CloseWindow();
     return 0;
 }
+
+
+            
