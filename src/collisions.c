@@ -1,6 +1,6 @@
 #include "header.h"
 
-bool check_collision(t_player player, Vector2 plat_pos, Vector2 plat_size) {
+static bool check_collision(t_player player, Vector2 plat_pos, Vector2 plat_size) {
     float left_foot = player.x + 27;
     float right_foot = player.x + player.width - 27;
 
@@ -10,7 +10,7 @@ bool check_collision(t_player player, Vector2 plat_pos, Vector2 plat_size) {
             player.y + player.height - player.velocity <= plat_pos.y);
 }
 
-bool check_bottom_collision(t_player player, Vector2 plat_pos, Vector2 plat_size) {
+static bool check_bottom_collision(t_player player, Vector2 plat_pos, Vector2 plat_size) {
     float head_x;
     if (player.direction == RIGHT)
     {

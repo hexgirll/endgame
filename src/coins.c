@@ -1,6 +1,6 @@
 #include "header.h"
 
-bool check_coin_collision(t_player player, t_coin coin) {
+static bool check_coin_collision(t_player player, t_coin coin) {
     return (player.x < coin.position.x + player.animation.coin_source.width &&
             player.x + player.width > coin.position.x &&
             player.y < coin.position.y + player.animation.coin_source.height &&

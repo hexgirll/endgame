@@ -14,6 +14,8 @@ int main() {
     Texture2D coin = LoadTexture("resource/textures/coin.png");
     Texture2D portal = LoadTexture("resource/textures/portal.png");
     Texture2D ghost = LoadTexture("resource/textures/boo.png");
+    Texture2D gameOverTexture = LoadTexture("resource/textures/letters_game_over.png");
+    Texture2D youWin = LoadTexture("resource/textures/letters_you_win.png");
 
     // Menu textures
     Texture2D button_texture_1 = LoadTexture("resource/textures/menu1.png");
@@ -34,6 +36,8 @@ int main() {
     SetSoundVolume(coin_pickup, 0.5f);
     Sound lose = LoadSound("resource/audio/lose.mp3");
     SetSoundVolume(lose, 0.5f);
+    Sound win = LoadSound("resource/audio/win.mp3");
+    SetSoundVolume(win, 0.5f);
     bool is_muted = false;
     float music_volume = 0.5f;
 
@@ -89,6 +93,7 @@ int main() {
     while (!WindowShouldClose()) {
 
         if (current_state == MENU) {
+            StopSound(grass_running);
             create_menu(&current_state, &music, background, button_texture_1, button_texture_2, 
                         off_sound_button, on_sound_button, game_name, &is_muted, &music_volume);
             initialized = false;
@@ -97,6 +102,7 @@ int main() {
 
         // Update and draw Level 1
         else if (current_state == LEVEL1) {
+            SetMusicVolume(music, 0.2f);
             if (IsKeyPressed(KEY_P)) {
                 is_paused = !is_paused;
             }
@@ -148,7 +154,7 @@ int main() {
 
                 draw_level(platforms, platform_count, m_platforms, moving_platform_count);
                 draw_player(move, player, idle, run);
-                draw_hint(player);
+                draw_hint(current_state, player);
 
                 draw_coins(coins, player, coin);
                 draw_portal(current_state, player, &countdown, &last_time, &score, portal);
@@ -159,6 +165,7 @@ int main() {
             EndDrawing();
         }
         else if (current_state == LEVEL2) {
+            SetMusicVolume(music, 0.2f);
             if(IsKeyPressed(KEY_P)) {
                 is_paused = !is_paused;
             }
@@ -190,7 +197,7 @@ int main() {
             }
 
             if (score == MAX_COINS && check_portal_collision(player, portal_position)) {
-                current_state = MENU;
+                current_state = YOU_WIN;
                 initialized = false;
             }
 
@@ -209,6 +216,11 @@ int main() {
                     countdown = 10.0f;
                 }
             }
+
+            if (countdown == 0) {
+                current_state = GAME_OVER;
+            }
+            
             BeginDrawing();
                 ClearBackground(WHITE);
 
@@ -216,13 +228,14 @@ int main() {
 
                 draw_level(platforms, platform_count, m_platforms, moving_platform_count);
                 draw_player(move, player, idle, run);
+                draw_hint(current_state, player);
 
                 draw_coins(coins, player, coin);
                 draw_portal(current_state, player, &countdown, &last_time, &score, portal);
 
                 // Display score
                 DrawText(TextFormat("Score: %d", score), 10, 10, 20, WHITE);
-              EndDrawing();
+            EndDrawing();
         }
         else if (current_state == GAME_OVER) {
             static double death_time = 0; 
@@ -250,7 +263,7 @@ int main() {
             draw_coins(coins, player, coin);
             
             if (GetTime() - death_time > 1.5) {
-                game_over(); 
+                game_over(gameOverTexture); 
             }
             
             EndDrawing();
@@ -266,6 +279,30 @@ int main() {
                 lose_sound_played = false; 
             }
         }
+        else if (current_state == YOU_WIN) {
+
+            BeginDrawing();
+
+            ClearBackground(WHITE);
+            draw_background(background); 
+            draw_level(platforms, platform_count, m_platforms, moving_platform_count);
+            draw_player(IDLE, player, ghost, run);
+            draw_coins(coins, player, coin);
+            
+            EndDrawing();
+
+            you_win(youWin);
+
+            if (IsKeyPressed(KEY_ENTER)) {
+                current_state = MENU;
+                player.x = 10;
+                player.y = 736;
+                score = 0;
+                countdown = 10.0f;
+                initialized = false;
+                unloaded = false;
+            }
+        }
     }
 
     UnloadTexture(background);
@@ -278,6 +315,8 @@ int main() {
     UnloadTexture(off_sound_button);
     UnloadTexture(on_sound_button);
     UnloadTexture(game_name);
+    UnloadTexture(gameOverTexture);
+    UnloadTexture(youWin);
     for (int i = 0; i < 6; i++) {
         UnloadTexture(platforms[i].texture);
     }
