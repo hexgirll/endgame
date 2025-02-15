@@ -5,6 +5,7 @@ int main() {
     SetTargetFPS(60);
 
     e_game_state current_state = MENU;
+    e_game_state previous_state = MENU;
 
     // Load textures
     Texture2D background = LoadTexture("resource/textures/background.png");
@@ -70,7 +71,7 @@ int main() {
     int moving_platform_count = 0;
 
     Vector2 portal_position = (Vector2) {1500, 700};
-    Vector2 pause_button_position = (Vector2) {SCREEN_WIDTH / 2 - pause_button.width,
+    Vector2 pause_button_position = (Vector2) {SCREEN_WIDTH / 2 - pause_button.width / 2,
                                                SCREEN_HEIGHT - pause_button.height + 25};
     bool is_paused = false;
 
@@ -107,9 +108,9 @@ int main() {
             if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                 Vector2 mouse = GetMousePosition();
 
-
                 if (CheckCollisionPointRec(mouse, (Rectangle){pause_button_position.x, pause_button_position.y, pause_button.width, pause_button.height})) {
                     is_paused = !is_paused;
+                    previous_state = current_state; // Зберігаємо поточний стан перед паузою
                     current_state = is_paused ? PAUSE : LEVEL1;
                 }
             }
@@ -165,6 +166,8 @@ int main() {
             }
 
             if(!initialized) {
+                player.x = 10;
+                player.y = 650;
                 platform_count = 6; // Static array size
                 moving_platform_count = 5; // Static array size
                 init_level(current_state, platforms, m_platforms, coins);
@@ -176,6 +179,7 @@ int main() {
 
                 if (CheckCollisionPointRec(mouse, (Rectangle){pause_button_position.x, pause_button_position.y, pause_button.width, pause_button.height})) {
                     is_paused = !is_paused;
+                    previous_state = current_state; // Зберігаємо поточний стан перед паузою
                     current_state = is_paused ? PAUSE : LEVEL2;
                 }
             }
@@ -215,6 +219,43 @@ int main() {
 
             EndDrawing();
         }
+
+        else if (current_state == PAUSE) {
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                Vector2 mouse = GetMousePosition();
+
+                // Перевірка натискання на кнопку play_button
+                if (CheckCollisionPointRec(mouse, (Rectangle){pause_button_position.x, pause_button_position.y, pause_button.width, pause_button.height})) {
+                    is_paused = false;
+                    current_state = previous_state; // Повертаємося на попередній рівень
+                }
+            }
+
+            BeginDrawing();
+                ClearBackground(WHITE);
+
+                draw_background(background);
+
+                if (is_paused) {
+                    DrawTextureEx(play_button, pause_button_position, 0.0f, 0.55f, WHITE);
+                } 
+                else {
+                    DrawTextureEx(pause_button, pause_button_position, 0.0f, 0.55f, WHITE);
+                }
+
+                draw_level(platforms, platform_count, m_platforms, moving_platform_count);
+                draw_player(move, player, idle, run);
+
+                draw_coins(coins, player, coin);
+                draw_portal(player, &countdown, &last_time, &score, portal);
+
+                // Display score
+                DrawText(TextFormat("Score: %d", score), 10, 10, 20, WHITE);
+
+
+            EndDrawing();
+        }
+
         else if (current_state == GAME_OVER) {
             static double death_time = 0; 
             static bool ghost_displayed = false; 
